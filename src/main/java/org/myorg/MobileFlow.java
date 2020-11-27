@@ -9,6 +9,7 @@ import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.mapreduce.Job;
 import org.myorg.model.FlowBean;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,7 +36,7 @@ public class MobileFlow {
             String line = text.toString();
 
             // 按照tab切割字符
-            StringTokenizer tokenizer = new StringTokenizer(line, "\t");
+            StringTokenizer tokenizer = new StringTokenizer(line);
 
             // 拆分字符为数组
             ArrayList<String> rs = new ArrayList<>();
@@ -47,6 +48,7 @@ public class MobileFlow {
             long upFlow = Long.parseLong(rs.get(1));
             long downFlow = Long.parseLong(rs.get(2));
 
+            System.out.print(new FlowBean(upFlow, downFlow).toString());
             outputCollector.collect(new Text(mobile), new FlowBean(upFlow, downFlow));
         }
     }
@@ -71,34 +73,38 @@ public class MobileFlow {
     }
 
     public static void main(String[] args) throws Exception {
-        JobConf conf = new JobConf(MobileFlow.class);
+        File file = new File("output");
+        if (file.exists() && file.isDirectory()) {
+            file.delete();
+        }
 
-        // 指定jar的class
-        conf.setJarByClass(MobileFlow.class);
+        JobConf conf = new JobConf(MobileFlow.class);
 
         // 指定job名称
         conf.setJobName("mobileFlow");
+
+        // 指定jar中的启动类的class
+        conf.setJarByClass(MobileFlow.class);
 
         // 指定map的class
         conf.setMapperClass(Map.class);
 
         // 指定reduce的class
         conf.setReducerClass(Reduce.class);
-        conf.setCombinerClass(Reduce.class);
+
+        // 指定map的输出数据格式
+        conf.setMapOutputKeyClass(Text.class);
+        conf.setMapOutputValueClass(FlowBean.class);
+
+        // 指定输出数据的输出格式
+        conf.setOutputKeyClass(Text.class);
+        conf.setOutputValueClass(FlowBean.class);
 
         // 指定数据是输入格式
         conf.setInputFormat(TextInputFormat.class);
 
         // 指定数据的输出格式
         conf.setOutputFormat(TextOutputFormat.class);
-
-        // 指定输出数据的输出格式
-        conf.setOutputKeyClass(Text.class);
-        conf.setOutputValueClass(FlowBean.class);
-
-        // 指定map的输出数据格式
-        conf.setMapOutputKeyClass(Text.class);
-        conf.setMapOutputValueClass(FlowBean.class);
 
         // 指定输出路径
         FileInputFormat.setInputPaths(conf, new Path(args[0]));
