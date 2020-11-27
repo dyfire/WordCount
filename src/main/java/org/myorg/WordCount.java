@@ -1,5 +1,6 @@
 package org.myorg;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -45,6 +46,8 @@ public class WordCount {
     }
 
     public static void main(String[] args) throws Exception {
+        Tool.deleteDir(new File("output"));
+
         // 新建一个Job
         JobConf conf = new JobConf(WordCount.class);
 

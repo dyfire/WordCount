@@ -1,12 +1,9 @@
 package org.myorg;
 
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.*;
-import org.apache.hadoop.mapreduce.Job;
 import org.myorg.model.FlowBean;
 
 import java.io.File;
@@ -28,15 +25,18 @@ import java.util.StringTokenizer;
  */
 public class MobileFlow {
     public static class Map extends MapReduceBase
-            implements Mapper<LongWritable, Text, Text, IntWritable> {
+            implements Mapper<LongWritable, Text, Text, FlowBean> {
 
         @Override
-        public void map(LongWritable longWritable, Text text, OutputCollector<Text, IntWritable> outputCollector, Reporter reporter) throws IOException {
+        public void map(LongWritable longWritable,
+                        Text text,
+                        OutputCollector<Text, FlowBean> outputCollector,
+                        Reporter reporter) throws IOException {
             // 行内容转换为String
             String line = text.toString();
 
             // 按照tab切割字符
-            StringTokenizer tokenizer = new StringTokenizer(line);
+            StringTokenizer tokenizer = new StringTokenizer(line, ",");
 
             // 拆分字符为数组
             ArrayList<String> rs = new ArrayList<>();
@@ -48,35 +48,46 @@ public class MobileFlow {
             long upFlow = Long.parseLong(rs.get(1));
             long downFlow = Long.parseLong(rs.get(2));
 
-            System.out.print(new FlowBean(upFlow, downFlow).toString());
-            outputCollector.collect(new Text(mobile), new FlowBean(upFlow, downFlow));
+            FlowBean flowBean = new FlowBean(upFlow, downFlow);
+
+            System.out.println(mobile + " = " + flowBean.toString());
+            outputCollector.collect(new Text(mobile), flowBean);
         }
     }
 
     public static class Reduce extends MapReduceBase
-            implements Reducer<Text, FlowBean, Text, IntWritable> {
+            implements Reducer<Text, FlowBean, Text, FlowBean> {
 
         @Override
-        public void reduce(Text text, Iterator<FlowBean> iterator, OutputCollector<Text, IntWritable> outputCollector, Reporter reporter) throws IOException {
+        public void reduce(Text text,
+                           Iterator<FlowBean> iterator,
+                           OutputCollector<Text, FlowBean> outputCollector,
+                           Reporter reporter) throws IOException {
             long sumUpFlow = 0;
             long sumDownFlow = 0;
 
             // 遍历所有,将上行和下行流量累加
-            while (iterator.hasNext()) {
-                sumUpFlow += iterator.next().getDownFlow();
-                sumDownFlow += iterator.next().getUpFlow();
+            try {
+                System.out.println(text);
+                while (iterator.hasNext()){
+                    System.out.println(text + " = " + Long.toString(iterator.next().getUpFlow())
+                            + " - "
+                            + Long.toString(iterator.next().getDownFlow()));
+//                    sumUpFlow += iterator.next().getUpFlow();
+//                    sumDownFlow += iterator.next().getDownFlow();
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
 
+            System.out.println("done");
             FlowBean flowBean = new FlowBean(sumUpFlow, sumDownFlow);
             outputCollector.collect(text, flowBean);
         }
     }
 
     public static void main(String[] args) throws Exception {
-        File file = new File("output");
-        if (file.exists() && file.isDirectory()) {
-            file.delete();
-        }
+        Tool.deleteDir(new File("output"));
 
         JobConf conf = new JobConf(MobileFlow.class);
 

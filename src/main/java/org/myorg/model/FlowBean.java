@@ -1,17 +1,23 @@
 package org.myorg.model;
 
-import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Writable;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class FlowBean extends IntWritable {
+public class FlowBean implements Writable {
     public long upFlow;
     public long downFlow;
     public long sumFlow;
 
+    public FlowBean() {
+        super();
+    }
+
     public FlowBean(long upFlow, long downFlow) {
+        super();
+
         this.upFlow = upFlow;
         this.downFlow = downFlow;
         this.sumFlow = upFlow + downFlow;
