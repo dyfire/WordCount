@@ -32,15 +32,15 @@ public class FlowBean implements Writable {
 
     @Override
     public void readFields(DataInput dataInput) throws IOException {
-        upFlow = dataInput.readLong();
-        downFlow = dataInput.readLong();
-        sumFlow = dataInput.readLong();
+        this.upFlow = dataInput.readLong();
+        this.downFlow = dataInput.readLong();
+        this.sumFlow = dataInput.readLong();
     }
 
-    @Override
-    public String toString() {
-        return upFlow + "\t" + downFlow + "\t" + sumFlow;
-    }
+//    @Override
+//    public String toString() {
+//        return this.upFlow + "," + this.downFlow + "," + this.sumFlow;
+//    }
 
     public long getUpFlow() {
         return upFlow;
