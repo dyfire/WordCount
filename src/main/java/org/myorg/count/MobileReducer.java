@@ -23,7 +23,7 @@ public class MobileReducer extends Reducer<LongWritable, FlowBean, LongWritable,
             System.out.println(flowBean.upFlow);
             list.add(flow);
 
-            context.write(key, new Text(flow.toString()));
+            context.write(key, new Text(Long.toString(flow.upFlow)));
             System.out.println(flow.toString());
         }
     }
