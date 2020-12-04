@@ -14,17 +14,19 @@ public class MobileReducer extends Reducer<LongWritable, FlowBean, LongWritable,
     protected void reduce(LongWritable key, Iterable<FlowBean> values, Context context)
             throws IOException, InterruptedException {
         List<FlowBean> list = new ArrayList<FlowBean>();
+        long upSum = 0;
+        long downSum = 0;
+
         for (FlowBean flowBean : values) {
             FlowBean flow = new FlowBean();
             flow.setUpFlow(flowBean.upFlow);
             flow.setDownFlow(flowBean.downFlow);
             flow.setSumFlow(flowBean.sumFlow);
 
-            System.out.println(flowBean.upFlow);
-            list.add(flow);
-
-            context.write(key, new Text(Long.toString(flow.upFlow)));
-            System.out.println(flow.toString());
+            upSum += flowBean.upFlow;
+            downSum += flowBean.downFlow;
         }
+
+        context.write(key, new Text(Long.toString(upSum) + "," + Long.toString(downSum)));
     }
 }
