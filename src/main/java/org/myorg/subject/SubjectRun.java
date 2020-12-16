@@ -2,6 +2,7 @@ package org.myorg.subject;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
@@ -10,7 +11,6 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.myorg.Tool;
 import org.myorg.model.SubjectBean;
 
-import javax.xml.soap.Text;
 import java.io.File;
 import java.io.IOException;
 

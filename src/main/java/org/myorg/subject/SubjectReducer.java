@@ -11,8 +11,17 @@ public class SubjectReducer extends Reducer<Text, SubjectBean, LongWritable, Tex
     @Override
     protected void reduce(Text key, Iterable<SubjectBean> values, Context context)
             throws IOException, InterruptedException {
-        for (SubjectBean subjectBean : values) {
+        long sum = 0;
+        long chinese = 0;
+        long english = 0;
+        long math = 0;
 
+        for (SubjectBean subjectBean : values) {
+            chinese = subjectBean.getChinese();
+            english = subjectBean.getEnglish();
+            math = subjectBean.getMath();
         }
+
+        long a = sum;
     }
 }
