@@ -10,6 +10,8 @@ public class SubjectBean implements Writable {
     private long chinese;
     private long english;
     private long math;
+    private long total;
+    private long avg;
 
     @Override
     public void write(DataOutput dataOutput) throws IOException {
@@ -47,5 +49,21 @@ public class SubjectBean implements Writable {
 
     public void setMath(long math) {
         this.math = math;
+    }
+
+    public long getTotal() {
+        return total;
+    }
+
+    public void setTotal(long total) {
+        this.total = total;
+    }
+
+    public long getAvg() {
+        return avg;
+    }
+
+    public void setAvg(long avg) {
+        this.avg = avg;
     }
 }
