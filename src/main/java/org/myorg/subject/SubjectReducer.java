@@ -20,8 +20,16 @@ public class SubjectReducer extends Reducer<Text, SubjectBean, LongWritable, Tex
             chinese = subjectBean.getChinese();
             english = subjectBean.getEnglish();
             math = subjectBean.getMath();
+            sum = chinese + english + math
         }
 
-        long a = sum;
+        SubjectBean subjectBean = new SubjectBean();
+        subjectBean.setChinese(chinese);
+        subjectBean.setEnglish(english);
+        subjectBean.setMath(math);
+        subjectBean.setTotal(sum);
+        subjectBean.setAvg(sum / 3);
+
+        context.write(key, subjectBean);
     }
 }
