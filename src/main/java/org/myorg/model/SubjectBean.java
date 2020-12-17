@@ -66,4 +66,13 @@ public class SubjectBean implements Writable {
     public void setAvg(long avg) {
         this.avg = avg;
     }
+
+    @Override
+    public String toString() {
+        return  chinese +
+                "," + english +
+                "," + math +
+                "," + total +
+                "," + avg;
+    }
 }
