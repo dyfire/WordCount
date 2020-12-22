@@ -24,7 +24,8 @@ public class WordMapper extends Mapper<LongWritable, Text, Text, WordBean> {
 
         while (stringTokenizer.hasMoreTokens()) {
             String word = stringTokenizer.nextToken();
-            context.write(new Text(word), new WordBean(word, fileName));
+            WordBean wordBean = new WordBean(word, fileName, 1);
+            context.write(new Text(word), wordBean);
         }
     }
 }

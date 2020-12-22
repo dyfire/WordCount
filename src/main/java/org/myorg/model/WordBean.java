@@ -1,6 +1,12 @@
 package org.myorg.model;
 
-public class WordBean {
+import org.apache.hadoop.io.Writable;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+public class WordBean implements Writable {
     private long number;
     private String word;
     private String filename;
@@ -9,9 +15,10 @@ public class WordBean {
 
     }
 
-    public WordBean(String word, String filename) {
+    public WordBean(String word, String filename, long number) {
         this.word = word;
         this.filename = filename;
+        this.number = number;
     }
 
     public long getNumber() {
@@ -41,5 +48,19 @@ public class WordBean {
     @Override
     public String toString() {
         return word + "," + number + "," + filename;
+    }
+
+    @Override
+    public void write(DataOutput dataOutput) throws IOException {
+        dataOutput.writeChars(this.word);
+        dataOutput.writeChars(this.filename);
+        dataOutput.writeLong(this.number);
+    }
+
+    @Override
+    public void readFields(DataInput dataInput) throws IOException {
+        this.word = dataInput.readLine();
+        this.filename = dataInput.readLine();
+//        this.number = dataInput.readLong();
     }
 }
