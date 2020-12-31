@@ -78,7 +78,8 @@ public class SecondSort {
             SortBean k1 = (SortBean) a;
             SortBean k2 = (SortBean) b;
 
-            return k1.compareTo(k2);
+            // 升序,如果用降序k1.compareTo(k2)
+            return k2.compareTo(k1);
         }
     }
 
@@ -95,7 +96,7 @@ public class SecondSort {
             SortBean k1 = (SortBean) a;
             SortBean k2 = (SortBean) b;
 
-            return (int) (k1.getFirst()) - (int) (k2.getSecond());
+            return (int) (k2.getSecond()) - (int) (k1.getSecond());
         }
     }
 
@@ -122,7 +123,7 @@ public class SecondSort {
         job.setMapOutputValueClass(NullWritable.class);
 
         // Reduce个数
-        job.setNumReduceTasks(3);
+//        job.setNumReduceTasks(2);
 
         // 分区类
         job.setPartitionerClass(Partition.class);
