@@ -30,6 +30,9 @@ public class WordRun {
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(WordBean.class);
 
+        job.setPartitionerClass(WordPartition.class);
+        job.setNumReduceTasks(1);
+
         job.setInputFormatClass(TextInputFormat.class);
         FileInputFormat.setInputPaths(job, new Path(args[0]));
 

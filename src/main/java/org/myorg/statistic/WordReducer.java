@@ -20,4 +20,6 @@ public class WordReducer extends Reducer<Text, WordBean, Text, Text> {
 
         context.write(key, new Text(String.valueOf(count)));
     }
+
+
 }

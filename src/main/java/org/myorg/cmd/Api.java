@@ -94,8 +94,4 @@ public class Api {
 
         return flag;
     }
-
-    public static void main(String[] args) {
-        Api.rm("a");
-    }
 }
