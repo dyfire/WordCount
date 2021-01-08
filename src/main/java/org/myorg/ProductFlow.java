@@ -12,7 +12,6 @@ import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
-import org.myorg.model.FlowBean;
 import org.myorg.model.GoodBean;
 
 import java.io.File;
@@ -63,22 +62,21 @@ public class ProductFlow {
             // 存储订单集合
             ArrayList<GoodBean> goodBeans = new ArrayList<>();
 
-            // 定义产品bean
+            // 产品对象
             GoodBean productBean = new GoodBean();
 
+            // 0:订单,1:产品
             for (GoodBean goodBean : values) {
                 if ("0".equals(goodBean.getFlag())) {
-                    // 拷贝传递过来的每条订单数据到集合中
-                    GoodBean goodBean1 = new GoodBean();
+                    GoodBean orderBean = new GoodBean();
                     try {
-                        BeanUtils.copyProperties(goodBean1, goodBean);
+                        BeanUtils.copyProperties(orderBean, goodBean);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-                    goodBeans.add(goodBean1);
+                    goodBeans.add(orderBean);
                 } else {
-                    // 拷贝产品数据到内存中
                     try {
                         BeanUtils.copyProperties(productBean, goodBean);
                     } catch (Exception e) {
